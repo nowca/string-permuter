@@ -1,0 +1,438 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta name="description" content="" />
+        <meta name="keywords" content="" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>String Permutation Generator</title>
+        <style>
+            html {
+                height: 100%;
+                min-height: 100%;
+                position: relative;
+            }
+            body {
+                position: relative;
+                min-height: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+                font-family: sans-serif;
+                font-size: 1rem;
+                background-color: #fff;
+            }
+            h2, .button {
+                font-family: Arial, sans-serif;
+                font-size: 1.1rem;
+                font-weight: 600;
+                text-transform: uppercase;
+                line-height: 2;
+                color: #2d5674;
+                margin-bottom: 0;
+            }
+            .wrapper {
+                width: 100%;
+                margin: 0 auto;
+                margin-bottom: 0;
+                font-size: 0.9rem;
+            }
+            .section {
+                z-index: 10;
+                width: 80%;
+                margin: 0 auto;
+                margin-bottom: 40px;
+                line-height: 0;
+                background-color: #fff;
+                padding-bottom: 0;
+            }
+            .section.light {
+                width: 80%;
+                margin: 0px 0px 0px;
+                padding-left: 10%;
+                padding-right: 10%;
+                border: 0;
+                background-color: #efefef;
+                padding-bottom: 0;
+                text-align: center;
+                background-color: #dddddd;
+                padding-bottom: 32px;
+            }
+            @media only screen and (max-height: 400px) {
+                h2 {
+                    margin-top: 0;
+                }
+                .section {
+                    padding: 10px;
+                }
+                .section.light {
+                    padding-bottom: 20px !important;
+                }
+                #word-output {
+                    height: 40vh !important;
+                }
+            }
+            @media only screen and (min-height: 400px) {
+                .section {
+                    padding: 20px;
+                }
+                .section.light {
+                    padding-bottom: 60px !important;
+                }
+                #word-output {
+                    height: 50vh !important;
+                }
+            }
+            .section.clear {
+                position: relative;
+            }
+            #word-output {
+                display: inline-block;
+                position: relative;
+                height: auto;
+                font-size: 16px;
+                line-height: normal;
+                width: 90%;
+                max-width: 200px;
+                padding: 10px;
+                resize: none;
+            }
+            #word-input,
+            #download-button,
+            #permute-button,
+            #cancel-button {
+                width: 94%;
+                max-width: 200px;
+                padding: 10px 10px 10px 10px;
+                display: inline-block;
+                position: relative;
+                vertical-align: top;
+                font-size: 1rem;
+            }
+            #permute-button,
+            #cancel-button {
+                /*width: 10rem;*/
+                margin-top: 24px;
+            }
+            .button {
+                display: inline-block;
+                margin: 16px;
+                padding: 12px;
+                background-color: #ccc;
+                text-decoration: none;
+                color: #777;
+                text-transform: uppercase;
+            }
+            .button:hover {
+                background-color: #ddd;
+                color: #4f7896;
+            }
+            #content {
+                text-align: center;
+                margin-top: 0 !important;
+            }
+        </style>
+        <style>
+             /* loading spinner from https://loading.io/css/ */
+            .lds-ring, #loading {
+                position:  absolute;
+                left: 50%;
+                top: 50%;
+                transform: translate(-50%, -50%);
+            }
+            .lds-ring,
+            .lds-ring div {
+                color: #1c4c5b;
+                display: none;
+                width: 80px;
+                height: 80px;
+                box-sizing: border-box;
+            }
+            .lds-ring div {
+                box-sizing: border-box;
+                display: block;
+                position: absolute;
+                width: 64px;
+                height: 64px;
+                margin: 8px;
+                border: 8px solid currentColor;
+                border-radius: 50%;
+                animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+                border-color: currentColor transparent transparent transparent;
+            }
+            .lds-ring div:nth-child(1) {
+                animation-delay: -0.45s;
+            }
+            .lds-ring div:nth-child(2) {
+                animation-delay: -0.3s;
+            }
+            .lds-ring div:nth-child(3) {
+                animation-delay: -0.15s;
+            }
+            @keyframes lds-ring {
+                0% {
+                    transform: rotate(0deg);
+                }
+                100% {
+                    transform: rotate(360deg);
+                }
+            }
+        </style>
+    </head>
+    <body>
+    	<!--[if lt IE 8]>
+	    	<p class="browserupgrade">You are using an outdated browser. Please upgrade your browser to improve your experience.</p>
+	    <![endif]-->
+    	<div class="main-canvas">
+	        <div id="content" class="wrapper">
+	            <div class="section light">
+	                <h2>WORD TO PERMUTE</h2>
+		            <input type="text" id="word-input" name="word-input"><br>
+	            </div>
+	            <div class="section clear" id="section-tld-search">
+	            	<h2>WORD PERMUTATIONS</h2>
+                    <a class="button" id="permute-button" href="#">Permute</a>
+                    <textarea disabled name="word-output" id="word-output" rows="20" cols="25"></textarea>
+                    <div id="loading" class="lds-ring"><div></div><div></div><div></div><div></div></div>
+                    <br>
+                    <a href="#" class="button" id="download-button">Save file</a>
+                    <a href="#" class="button" id="cancel-button">Cancel</a>
+	            </div>
+	        </div>
+
+        </div>
+        <script id="webworker-script" type="text/javascript">
+            self.onmessage = function(message)
+            {
+                var permutation_array = [], used_chars = [];
+
+                /*
+                    string permutation generator from
+                    https://staff.roguecc.edu/JMiller/JavaScript/permute.js
+                */
+                function permute(input)
+                {
+                    var i, char, chars = input.split("");
+
+                    for (i = 0; i < chars.length; i++)
+                    {
+                        char = chars.splice(i, 1);
+                        used_chars.push(char);
+
+                        if (chars.length == 0)
+                        {
+                            permutation_array[permutation_array.length] = used_chars.join("");
+                        }
+
+                        permute(chars.join(""));
+                        chars.splice(i, 0, char);
+                        used_chars.pop();
+                    }
+                }
+
+                const startTime = performance.now()
+                permute(message.data);
+                const endTime = performance.now()
+                console.log(`calculatePermutation: ${endTime - startTime} ms`)
+
+                
+                self.postMessage(permutation_array.join('\n'));
+            };
+        </script>
+        <script>
+            // global variables
+            window.URL = window.URL || window.webkitURL;
+
+            var KEY = {
+                Backspace: 8,
+                Shift: 16,
+                ShiftLock: 20,
+                Strg: 17,
+                Alt: 18,
+                AltGr: 225,
+                Left: 37,
+                Up: 38,
+                Right: 39,
+                Down: 40
+            }
+
+            var elements = {
+                inputField: document.querySelector("#word-input"),
+                outputList: document.querySelector("#word-output"),
+                loading: document.querySelector("#loading"),
+                permuteButton: document.querySelector("#permute-button"),
+                downloadButton: document.querySelector("#download-button"),
+                cancelButton: document.querySelector("#cancel-button")
+            };
+
+            var webWorkerInstance = {};
+            var downloadFileBlob;
+
+            var INPUT_STREAM_LENGTH = 6;
+            var INPUT_MAXIMUM_LENGTH = 10;
+            var CALCULATION_MESSAGE = "calculating, please wait...";
+
+            var WORKER_IS_RUNNING = false;
+
+            // functions
+            function showElement(element)
+            {
+                element.style.display = "inline-block";
+            }
+
+            function hideElement(element)
+            {
+                element.style.display = "none";
+            }
+
+            function enableOutputList(setEnabled)
+            {
+                if (setEnabled == true)
+                {
+                    showElement(elements.outputList);
+                    hideElement(elements.loading);
+                    hideElement(elements.permuteButton);
+                    hideElement(elements.downloadButton);
+                    hideElement(elements.cancelButton);
+                }
+                else
+                {
+                    hideElement(elements.outputList);
+                    hideElement(elements.loading);
+                    hideElement(elements.downloadButton);
+                    showElement(elements.permuteButton);
+                    hideElement(elements.cancelButton);
+                }
+            }
+
+            function updateDownloadBlob()
+            {
+                downloadFileBlob = new Blob(
+                    [elements.outputList.value],
+                    {type: 'text/plain'}
+                );
+                elements.downloadButton.setAttribute(
+                    "href",
+                    window.URL.createObjectURL(downloadFileBlob)
+                );
+
+                var fileName = "word-permutations-" + new Date().toISOString();
+                fileName = fileName.replace(/:/g, "-");
+                fileName = fileName.replace(/\./g, "-");
+
+                elements.downloadButton.setAttribute(
+                    "download",
+                    fileName + ".txt"
+                );
+            };
+
+            webWorkerInstance.start = (function startNewWebWorker()
+            {
+                var webWorkerScriptBlob = new Blob(
+                    [document.querySelector('#webworker-script').textContent],
+                    {type: "text/javascript"}
+                );
+
+                webWorkerInstance = new Worker(
+                    window.URL.createObjectURL(webWorkerScriptBlob),
+                    {name: "Permute Generator Worker"}
+                );
+
+                webWorkerInstance.onmessage = function(event)
+                {
+                    elements.outputList.value = event.data;
+                    elements.inputField.disabled = false;
+                    showElement(elements.downloadButton);
+                    hideElement(elements.cancelButton);
+                    hideElement(elements.loading);
+                    updateDownloadBlob();
+                    WORKER_IS_RUNNING = false;
+                }
+
+                webWorkerInstance.start = this.start;
+            })
+
+            function postWorkerMessage()
+            {
+                enableOutputList(true);
+                showElement(elements.loading);
+                showElement(elements.cancelButton);
+                elements.outputList.value = CALCULATION_MESSAGE;
+
+                if (elements.inputField.value.length >= INPUT_STREAM_LENGTH)
+                {
+                    elements.inputField.disabled = true;
+                }
+
+                WORKER_IS_RUNNING = true;
+                webWorkerInstance.postMessage(elements.inputField.value);
+            }
+
+            webWorkerInstance.start();
+
+            // user interface
+            enableOutputList(true);
+
+            elements.inputField.addEventListener("keyup",function(event)
+            {
+                if (event.which != KEY.Backspace
+                 && event.which != KEY.Shift
+                 && event.which != KEY.ShiftLock
+                 && event.which != KEY.Strg
+                 && event.which != KEY.Alt
+                 && event.which != KEY.AltGr
+                 && event.which != KEY.Left
+                 && event.which != KEY.Up
+                 && event.which != KEY.Right
+                 && event.which != KEY.Down
+                )
+                {
+                    event.preventDefault();
+
+                    var INPUT_LENGTH_IS_ZERO = elements.inputField.value.length == 0 ? true : false;
+
+                    if (!WORKER_IS_RUNNING && !INPUT_LENGTH_IS_ZERO && elements.inputField.value.length < INPUT_STREAM_LENGTH)
+                    {
+                        postWorkerMessage();
+                    }
+                    else if (elements.inputField.value.length > INPUT_MAXIMUM_LENGTH)
+                    {
+                        enableOutputList(true);
+                        elements.outputList.value = "string too long (>= 10)";
+                    }
+                    else if (!INPUT_LENGTH_IS_ZERO && elements.inputField.value.length <= INPUT_MAXIMUM_LENGTH)
+                    {
+                        enableOutputList(false);
+                    }
+                    else if (INPUT_LENGTH_IS_ZERO)
+                    {
+                        enableOutputList(true);
+                        elements.outputList.value = "";
+                    }
+
+                    if (event.key === "Enter")
+                    {
+                        postWorkerMessage();
+                    }
+                }
+            });
+
+            elements.permuteButton.addEventListener("click", function(event)
+            {
+                postWorkerMessage();
+            });
+
+            elements.cancelButton.addEventListener("click", function(event)
+            {
+                webWorkerInstance.terminate();
+                webWorkerInstance.start();
+                elements.outputList.value = "";
+                elements.inputField.disabled = false;
+                enableOutputList(true);
+                hideElement(elements.cancelButton);
+                WORKER_IS_RUNNING = false;
+            });
+        </script>
+    </body>
+</html>

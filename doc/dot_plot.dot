@@ -1,0 +1,138 @@
+digraph {
+    rankdir="TB";
+    fontname="Purisa"
+    fontsize=14
+    nodesep=1.00;
+    forcelabels=true;
+    #splines="ortho";
+    #concentrate=true;
+    penwidth=2.0 
+
+    node [height=0.1 penwidth=2.0 shape=record fontsize=18 color="#bbbbbb" fontname="Purisa" fontcolor="#0378AB"];
+    edge [penwidth=2.0 fontname="Purisa" fontcolor="#aaaaaa"]
+
+    subgraph cluster_1
+    {
+        label=<<TABLE CELLBORDER="0" BORDER="0"><TR><TD COLSPAN="2" CELLPADDING="1" CELLSPACING="0" ALIGN="LEFT"><FONT POINT-SIZE="14" COLOR="#999999">depth: 1</FONT></TD></TR><TR><TD COLSPAN="2" CELLPADDING="1" CELLSPACING="0" ALIGN="LEFT"><FONT POINT-SIZE="14" COLOR="#999999">i: 0</FONT></TD></TR></TABLE>>
+        labeljust=r
+        margin="30,30"
+        color="#dddddd"
+
+        node [color="#999999"];
+        edge [color="#999999"];
+
+        // nodes
+        C1_permute                                  [height=0.4 shape=invhouse label=<<FONT POINT-SIZE="14" COLOR="BLACK">permute(</FONT><FONT POINT-SIZE="14" COLOR="#0378AB">abc</FONT><FONT POINT-SIZE="14" COLOR="BLACK">)</FONT>> fontcolor="#000000"];
+        C1_used_chars                               [color="#999999" penwidth=0.0 label=<<TABLE CELLPADDING="3" BORDER="0" CELLBORDER="2" CELLSPACING="0"><TR><TD WIDTH="24">a</TD><TD WIDTH="24"> </TD><TD WIDTH="24"> </TD></TR></TABLE>> xlabel=<<FONT POINT-SIZE="14" COLOR="BLACK">used_chars[]</FONT>>];
+        C1_chars                                    [color="#999999" penwidth=0.0 label=<<TABLE CELLPADDING="3" BORDER="0" CELLBORDER="2" CELLSPACING="0"><TR><TD WIDTH="24">a</TD><TD WIDTH="24">b</TD><TD WIDTH="24">c</TD></TR></TABLE>> xlabel=<<FONT POINT-SIZE="14" COLOR="BLACK">chars[]</FONT>>];
+
+        //edges
+        C1_permute -> C1A_permute                   [label=<<FONT POINT-SIZE="18" COLOR="#0378AB"> bc</FONT>>];
+        C1_permute -> C1_used_chars                 [label=<<FONT POINT-SIZE="18" COLOR="#999999"> .push(a)</FONT>>];
+        C1_used_chars -> C1A_used_chars             [style=dashed color="#7777bb" dir="back" headlabel=<<FONT POINT-SIZE="18" COLOR="#7777bb"> .pop() </FONT>>];
+        C1_used_chars -> C2_used_chars              [style=dashed weight=0];
+
+        subgraph cluster_1a
+        {
+            label=<<TABLE CELLBORDER="0" BORDER="0"><TR><TD COLSPAN="2" CELLPADDING="1" CELLSPACING="0" ALIGN="LEFT"><FONT POINT-SIZE="14" COLOR="#7777bb">depth: 2</FONT></TD></TR><TR><TD COLSPAN="2" CELLPADDING="1" CELLSPACING="0" ALIGN="LEFT"><FONT POINT-SIZE="14" COLOR="#7777bb">i: 0</FONT></TD></TR></TABLE>>
+            labeljust=r
+            color="#bbbbdd"
+
+            node [color="#bbbbdd"];
+            edge [color="#7777bb"];
+
+            // nodes
+            C1A_permute                                 [color="#7777bb" height=0.4 shape=invhouse label=<<FONT POINT-SIZE="14" COLOR="BLACK">permute(</FONT><FONT POINT-SIZE="14" COLOR="#0378AB">bc</FONT><FONT POINT-SIZE="14" COLOR="BLACK">)</FONT>> fontcolor="#000000"];
+            C1A_used_chars                              [color="#7777bb" penwidth=0.0 label=<<TABLE CELLPADDING="3" BORDER="0" CELLBORDER="2" CELLSPACING="0"><TR><TD WIDTH="24">a</TD><TD WIDTH="24">b</TD><TD WIDTH="24"> </TD></TR></TABLE>> xlabel=<<FONT POINT-SIZE="14" COLOR="BLACK">used_chars[]</FONT>>];
+            C1A_2A_BRANCH                               [shape=point,width=0.1,height=0.1 color="#7777bb" fillcolor="#7777bb"];
+
+            // edges
+            C1A_permute -> C1AA_permute                 [label=<<FONT POINT-SIZE="18" COLOR="#0378AB">c</FONT>>];
+            C1A_permute -> C1A_used_chars               [headlabel=<<FONT POINT-SIZE="18" COLOR="#7777bb"><b> </b> .push(b)</FONT>>];
+            C1A_used_chars -> C1AA_used_chars           [style=dashed color="#77bb77" dir="back" headlabel=<<FONT POINT-SIZE="18" COLOR="#77bb77"> .pop() </FONT>>];
+            C1AA_permutation_array -> C1A_2A_BRANCH     [penwidth=0.0 dir="none"];
+
+            subgraph cluster_1aa
+            {
+                label=<<TABLE CELLBORDER="0" BORDER="0"><TR><TD COLSPAN="2" CELLPADDING="1" CELLSPACING="0" ALIGN="LEFT"><FONT POINT-SIZE="14" COLOR="#77bb77">depth: 3</FONT></TD></TR><TR><TD COLSPAN="2" CELLPADDING="1" CELLSPACING="0" ALIGN="LEFT"><FONT POINT-SIZE="14" COLOR="#77bb77">i: 0</FONT></TD></TR></TABLE>>
+                labeljust=r
+                color="#aaddaa"
+
+                node [color="#aaddaa"];
+                edge [color="#77bb77"];
+
+                // nodes
+                C1AA_permute                                [color="#77bb77" height=0.4 shape=invhouse label=<<FONT POINT-SIZE="14" COLOR="BLACK">permute(</FONT><FONT POINT-SIZE="14" COLOR="#0378AB">c</FONT><FONT POINT-SIZE="14" COLOR="BLACK">)</FONT>> fontcolor="#000000"];
+                C1AA_used_chars                             [color="#77bb77" penwidth=0.0 label=<<TABLE CELLPADDING="3" BORDER="0" CELLBORDER="2" CELLSPACING="0"><TR><TD WIDTH="24">a</TD><TD WIDTH="24">b</TD><TD WIDTH="24">c</TD></TR></TABLE>> xlabel=<<FONT POINT-SIZE="14" COLOR="BLACK">used_chars[]</FONT>>];
+                C1AA_permutation_array                      [color="#77bb77" penwidth=0.0 label=<<TABLE CELLPADDING="3" BORDER="0" CELLBORDER="2" CELLSPACING="0"><TR><TD WIDTH="24">a</TD><TD WIDTH="24">b</TD><TD WIDTH="24">c</TD></TR></TABLE>> xlabel=<<FONT POINT-SIZE="14" COLOR="BLACK">permutation_array[0]</FONT>>];
+
+                // edges
+                C1AA_permute -> C1AAA_permute               [style=dashed label=<<FONT POINT-SIZE="18" COLOR="#0378AB"> </FONT>>];
+                C1AA_permute -> C1AA_used_chars             [headlabel=<<FONT POINT-SIZE="18" COLOR="#77bb77"><b> </b> .push(c)</FONT>>];
+                C1AA_used_chars -> C1AA_permutation_array   [label=<<FONT POINT-SIZE="18" COLOR="#0378AB"> </FONT>>];
+                
+
+
+                subgraph cluster_1aaa
+                {    
+                    label=<<TABLE CELLBORDER="0" BORDER="0"><TR><TD COLSPAN="2" CELLPADDING="1" CELLSPACING="0" ALIGN="LEFT"><FONT POINT-SIZE="14" COLOR="#bb7777">depth: 4</FONT></TD></TR></TABLE>>
+                    color="#ddaaaa"
+
+                    // nodes
+                    C1AAA_permute                               [color="#cccccc" fillcolor="#eeeeee" height=0.4 shape=invhouse label=<<FONT POINT-SIZE="14" COLOR="LIGHTGRAY">permute(</FONT><FONT POINT-SIZE="14" COLOR="#0378AB"> </FONT><FONT POINT-SIZE="14" COLOR="LIGHTGRAY">)</FONT>> fontcolor="#000000"];
+                }
+            }
+        }
+
+        subgraph cluster_2a
+        {
+            label=<<TABLE CELLBORDER="0" BORDER="0"><TR><TD COLSPAN="2" CELLPADDING="1" CELLSPACING="0" ALIGN="LEFT"><FONT POINT-SIZE="14" COLOR="#7777bb">depth: 2</FONT></TD></TR><TR><TD COLSPAN="2" CELLPADDING="1" CELLSPACING="0" ALIGN="LEFT"><FONT POINT-SIZE="14" COLOR="#7777bb">i: 1</FONT></TD></TR></TABLE>>
+            labeljust=r
+            color="#bbbbdd"
+
+            node [color="#bbbbdd"];
+            edge [color="#7777bb"];
+
+            // nodes
+           C2A_chars                                    [color="#7777bb" penwidth=0.0 label=<<TABLE CELLPADDING="3" BORDER="0" CELLBORDER="2" CELLSPACING="0"><TR><TD WIDTH="24">b</TD><TD WIDTH="24">c</TD><TD WIDTH="24"> </TD></TR></TABLE>> xlabel=<<FONT POINT-SIZE="14" COLOR="BLACK">chars[]</FONT>>];
+           C2_used_chars                               [color="#7777bb" penwidth=0.0 label=<<TABLE CELLPADDING="3" BORDER="0" CELLBORDER="2" CELLSPACING="0"><TR><TD WIDTH="24">a</TD><TD WIDTH="24">c</TD><TD WIDTH="24"> </TD></TR></TABLE>> xlabel=<<FONT POINT-SIZE="14" COLOR="BLACK">used_chars[]</FONT>>];
+       
+           //edges
+           C1A_2A_BRANCH -> C2A_chars;
+           C2A_chars -> C2_used_chars                  [label=<<FONT POINT-SIZE="18" COLOR="#7777bb">.push(c)</FONT>>];
+           C2A_chars -> C2AA_permute                    [label=<<FONT POINT-SIZE="18" COLOR="#0378AB"> b</FONT>>];
+           C2_used_chars -> C2AA_used_chars             [style=dashed color="#77bb77" dir="back" headlabel=<<FONT POINT-SIZE="18" COLOR="#77bb77"> .pop() </FONT>>];
+
+           subgraph cluster_2aa
+            {
+                label=<<TABLE CELLBORDER="0" BORDER="0"><TR><TD COLSPAN="2" CELLPADDING="1" CELLSPACING="0" ALIGN="LEFT"><FONT POINT-SIZE="14" COLOR="#77bb77">depth: 3</FONT></TD></TR><TR><TD COLSPAN="2" CELLPADDING="1" CELLSPACING="0" ALIGN="LEFT"><FONT POINT-SIZE="14" COLOR="#77bb77">i: 0</FONT></TD></TR></TABLE>>
+                labeljust=r
+                color="#aaddaa"
+
+                node [color="#aaddaa"];
+                edge [color="#77bb77"];
+
+                // nodes
+                C2AA_permute                                [color="#77bb77" height=0.4 shape=invhouse label=<<FONT POINT-SIZE="14" COLOR="BLACK">permute(</FONT><FONT POINT-SIZE="14" COLOR="#0378AB">b</FONT><FONT POINT-SIZE="14" COLOR="BLACK">)</FONT>> fontcolor="#000000"];
+                C2AA_used_chars                             [color="#77bb77" penwidth=0.0 label=<<TABLE CELLPADDING="3" BORDER="0" CELLBORDER="2" CELLSPACING="0"><TR><TD WIDTH="24">a</TD><TD WIDTH="24">c</TD><TD WIDTH="24">b</TD></TR></TABLE>> xlabel=<<FONT POINT-SIZE="14" COLOR="BLACK">used_chars[]</FONT>>];
+                C2AA_permutation_array                      [color="#77bb77" penwidth=0.0 label=<<TABLE CELLPADDING="3" BORDER="0" CELLBORDER="2" CELLSPACING="0"><TR><TD WIDTH="24">a</TD><TD WIDTH="24">c</TD><TD WIDTH="24">b</TD></TR></TABLE>> xlabel=<<FONT POINT-SIZE="14" COLOR="BLACK">permutation_array[1]</FONT>>];
+
+                // edges
+                C2AA_permute -> C2AAA_permute               [style=dashed label=<<FONT POINT-SIZE="18" COLOR="#0378AB"> </FONT>>];
+                C2AA_permute -> C2AA_used_chars             [headlabel=<<FONT POINT-SIZE="18" COLOR="#77bb77"><b> </b> .push(b)</FONT>>];
+                C2AA_used_chars -> C2AA_permutation_array   [label=<<FONT POINT-SIZE="18" COLOR="#0378AB"> </FONT>>];
+                
+
+
+                subgraph cluster_2aaa
+                {    
+                    label=<<TABLE CELLBORDER="0" BORDER="0"><TR><TD COLSPAN="2" CELLPADDING="1" CELLSPACING="0" ALIGN="LEFT"><FONT POINT-SIZE="14" COLOR="#bb7777">depth: 4</FONT></TD></TR></TABLE>>
+                    color="#ddaaaa"
+
+                    // nodes
+                    C2AAA_permute                               [color="#cccccc" fillcolor="#eeeeee" height=0.4 shape=invhouse label=<<FONT POINT-SIZE="14" COLOR="LIGHTGRAY">permute(</FONT><FONT POINT-SIZE="14" COLOR="#0378AB"> </FONT><FONT POINT-SIZE="14" COLOR="LIGHTGRAY">)</FONT>> fontcolor="#000000"];
+                }
+            }
+        }
+    }
+}
