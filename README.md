@@ -110,10 +110,10 @@ The called Web Worker thread runs the algorithm script with the input word
 
 
 
-![readme](doc/dot_plot.svg)
+![readme](doc/dot_plot.png)
 
 
-The visualisation plot is generated [sketchviz](https://sketchviz.com)
+The visualisation plot is generated with graphviz dot.
 <br>*You can find the .dot-file in the doc folder of the repository.*
 <br>
 
